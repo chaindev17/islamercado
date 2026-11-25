@@ -1,0 +1,27 @@
+# Dependencias
+node_modules/
+
+# Next.js
+.next/
+out/
+next-env.d.ts
+
+# Producción
+build/
+dist/
+
+# Entorno (las claves NO se suben al repo)
+.env
+.env*.local
+.env.production
+
+# Sistema operativo / editores
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Logs
+*.log
+npm-debug.log*

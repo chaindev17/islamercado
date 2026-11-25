@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-yellow: #ffe600;
+  --color-brand-yellow-hover: #f7d900;
+  --color-brand-blue: #3483fa;
+  --color-brand-blue-dark: #2968c8;
+  --color-brand-green: #00a650;
+}
+
+body {
+  background: #ededed;
+  color: #333;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+}
+
+/* Scroll horizontal discreto para la barra de categorías */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
