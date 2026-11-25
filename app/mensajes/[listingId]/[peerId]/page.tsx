@@ -82,9 +82,7 @@ export default function ChatPage() {
       } = await supabase.auth.getUser();
       if (!alive) return;
       if (!user) {
-        router.replace(
-          `/login?next=/mensajes/${listingId}/${peerId}`
-        );
+        router.replace(`/login?next=/mensajes/${listingId}/${peerId}`);
         return;
       }
       if (user.id === peerId) {
@@ -99,18 +97,21 @@ export default function ChatPage() {
           .select("title, price_usd, images, seller_id")
           .eq("id", listingId)
           .maybeSingle(),
-        supabase
-          .from("profiles")
-          .select("username")
-          .eq("id", peerId)
-          .single(),
+        supabase.from("profiles").select("username").eq("id", peerId).single(),
       ]);
       if (!alive) return;
       if (!l) {
         setBlocked(true);
         return;
       }
-      setListing(l as { title: string; price_usd: number; images: string[]; seller_id: string });
+      setListing(
+        l as {
+          title: string;
+          price_usd: number;
+          images: string[];
+          seller_id: string;
+        }
+      );
       setPeerName(p?.username ?? "Usuario");
       await loadMessages(user.id);
     })();
@@ -192,20 +193,17 @@ export default function ChatPage() {
   if (blocked) {
     return (
       <div className="max-w-md mx-auto px-4 py-16 text-center">
-        <div className="bg-white rounded-md shadow-sm p-10">
+        <div className="card p-10">
           <p className="text-4xl mb-3" aria-hidden>
             🌴
           </p>
-          <p className="font-semibold text-gray-800 mb-1">
+          <p className="font-semibold text-ink mb-1">
             Conversación no disponible
           </p>
-          <p className="text-sm text-gray-500 mb-6">
+          <p className="text-sm text-ink-soft mb-6">
             La publicación puede haber sido eliminada.
           </p>
-          <Link
-            href="/buscar"
-            className="inline-block bg-brand-blue hover:bg-brand-blue-dark text-white text-sm font-semibold rounded px-5 py-2.5 transition-colors"
-          >
+          <Link href="/buscar" className="btn btn-mar">
             Explorar publicaciones
           </Link>
         </div>
@@ -215,7 +213,7 @@ export default function ChatPage() {
 
   if (!me || !listing) {
     return (
-      <div className="max-w-3xl mx-auto px-4 py-16 text-center text-gray-500 text-sm">
+      <div className="max-w-3xl mx-auto px-4 py-16 text-center text-ink-soft text-sm">
         Cargando…
       </div>
     );
@@ -225,13 +223,13 @@ export default function ChatPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-6">
-      <div className="bg-white rounded-md shadow-sm overflow-hidden flex flex-col h-[calc(100dvh-220px)] min-h-[480px]">
+      <div className="card overflow-hidden flex flex-col h-[calc(100dvh-220px)] min-h-[480px]">
         {/* Cabecera */}
-        <div className="flex items-center gap-3 p-3 border-b border-gray-100">
+        <div className="flex items-center gap-3 p-3 border-b-2 border-ink/10 bg-paper2">
           <Link
             href="/mensajes"
             aria-label="Volver a mensajes"
-            className="p-1.5 text-gray-500 hover:text-brand-blue"
+            className="p-1.5 text-ink-soft hover:text-mar text-lg"
           >
             ←
           </Link>
@@ -240,26 +238,26 @@ export default function ChatPage() {
             <img
               src={listing.images[0]}
               alt=""
-              className="w-11 h-11 rounded object-cover bg-[#f7f7f7]"
+              className="w-11 h-11 rounded-lg object-cover bg-sand border border-ink/10"
             />
           ) : (
-            <div className="w-11 h-11 rounded bg-[#f7f7f7] flex items-center justify-center text-gray-300">
+            <div className="w-11 h-11 rounded-lg bg-sand border border-ink/10 flex items-center justify-center text-ink/20">
               🖼️
             </div>
           )}
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-gray-800 truncate">
+            <p className="text-sm font-semibold text-ink truncate">
               {peerName}
             </p>
             <Link
               href={`/listing/${listingId}`}
-              className="text-xs text-brand-blue hover:underline truncate block max-w-[260px] sm:max-w-md"
+              className="text-xs text-mar hover:text-mar-dark underline decoration-wavy decoration-coral/60 underline-offset-2 truncate block max-w-[240px] sm:max-w-md"
             >
               {listing.title} · {formatPrice(listing.price_usd)}
             </Link>
           </div>
           {isSeller && (
-            <span className="ml-auto text-[11px] bg-green-100 text-green-800 font-semibold px-2 py-1 rounded-full shrink-0">
+            <span className="ml-auto text-[11px] bg-sun text-ink font-semibold px-2 py-1 rounded-full border-2 border-ink/20 shrink-0">
               Vendedor
             </span>
           )}
@@ -268,7 +266,7 @@ export default function ChatPage() {
         {/* Mensajes */}
         <div className="flex-1 overflow-y-auto p-3 sm:p-4 flex flex-col gap-2">
           {msgs.length === 0 && (
-            <div className="my-auto text-center text-sm text-gray-400 px-6">
+            <div className="my-auto text-center text-sm text-ink-soft px-6">
               Aún no hay mensajes. ¡Rompe el hielo preguntando por el
               producto! 🌴
             </div>
@@ -281,16 +279,16 @@ export default function ChatPage() {
                 className={`max-w-[80%] sm:max-w-[70%] ${mine ? "self-end" : "self-start"}`}
               >
                 <div
-                  className={`px-3.5 py-2 rounded-2xl text-sm leading-snug break-words ${
+                  className={`px-3.5 py-2 rounded-2xl text-sm leading-snug break-words border-2 ${
                     mine
-                      ? "bg-brand-blue text-white rounded-br-md"
-                      : "bg-gray-100 text-gray-800 rounded-bl-md"
+                      ? "bg-mar text-white border-mar rounded-br-md"
+                      : "bg-sand text-ink border-ink/15 rounded-bl-md"
                   }`}
                 >
                   {m.body}
                 </div>
                 <p
-                  className={`text-[10px] text-gray-400 mt-0.5 ${mine ? "text-right" : ""}`}
+                  className={`text-[10px] text-ink-soft/70 mt-0.5 ${mine ? "text-right" : ""}`}
                 >
                   {new Date(m.created_at).toLocaleTimeString("es-ES", {
                     hour: "2-digit",
@@ -306,7 +304,7 @@ export default function ChatPage() {
         {/* Enviar */}
         <form
           onSubmit={send}
-          className="border-t border-gray-100 p-2 sm:p-3 flex gap-2"
+          className="border-t-2 border-ink/10 bg-paper2 p-2 sm:p-3 flex gap-2"
         >
           <input
             type="text"
@@ -314,19 +312,17 @@ export default function ChatPage() {
             onChange={(e) => setText(e.target.value)}
             maxLength={2000}
             placeholder="Escribe un mensaje…"
-            className="flex-1 min-w-0 border border-gray-300 rounded-full px-4 py-2.5 outline-none focus:border-brand-blue text-sm"
+            className="input rounded-full flex-1 min-w-0"
           />
           <button
             type="submit"
             disabled={sending || !text.trim()}
-            className="shrink-0 bg-brand-blue hover:bg-brand-blue-dark disabled:opacity-50 text-white font-semibold rounded-full px-5 py-2.5 text-sm transition-colors"
+            className="btn btn-mar shrink-0"
           >
             Enviar
           </button>
         </form>
-        {error && (
-          <p className="px-3 pb-2 text-xs text-red-600">{error}</p>
-        )}
+        {error && <p className="px-3 pb-2 text-xs text-coral-dark">{error}</p>}
       </div>
     </div>
   );

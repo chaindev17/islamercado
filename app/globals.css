@@ -1,19 +1,106 @@
 @import "tailwindcss";
+@import "@fontsource-variable/fraunces";
 
 @theme {
-  --color-brand-yellow: #ffe600;
-  --color-brand-yellow-hover: #f7d900;
-  --color-brand-blue: #3483fa;
-  --color-brand-blue-dark: #2968c8;
-  --color-brand-green: #00a650;
+  /* Paleta "Malecón al atardecer" */
+  --font-display: "Fraunces Variable", Georgia, "Times New Roman", serif;
+
+  --color-paper: #fbf3e4;      /* crema colonial */
+  --color-paper2: #fffbf2;     /* papel de tarjeta */
+  --color-sand: #f3e3c3;       /* arena */
+  --color-ink: #21322f;        /* tinta verde-noche */
+  --color-ink-soft: #5c6b66;
+  --color-mar: #0e5e70;        /* azul del malecón */
+  --color-mar-dark: #0a4a59;
+  --color-coral: #f2604d;      /* coral del faro */
+  --color-coral-dark: #d64836;
+  --color-sun: #ffc53d;        /* sol cubano */
+  --color-sun-deep: #f5a623;
+  --color-palm: #2e8c6a;       /* verde palma */
+
+  --color-brand-yellow: #ffc53d;
+  --color-brand-yellow-hover: #f5a623;
+  --color-brand-blue: #0e5e70;
+  --color-brand-blue-dark: #0a4a59;
+  --color-brand-green: #2e8c6a;
 }
 
 body {
-  background: #ededed;
-  color: #333;
+  background: var(--color-paper);
+  color: var(--color-ink);
   font-family:
-    -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial,
-    sans-serif;
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica,
+    Arial, sans-serif;
+}
+
+::selection {
+  background: var(--color-sun);
+}
+
+@layer components {
+  /* Botones estilo póster: borde tinta + sombra dura que se "pisa" al pulsar */
+  .btn {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-full border-2 border-ink px-4 py-2 text-sm font-semibold shadow-[2px_2px_0_#21322f] transition-all disabled:pointer-events-none disabled:opacity-60;
+  }
+  .btn:active {
+    @apply translate-x-[2px] translate-y-[2px] shadow-none;
+  }
+  .btn-mar {
+    @apply bg-mar text-white hover:bg-mar-dark;
+  }
+  .btn-coral {
+    @apply bg-coral text-white hover:bg-coral-dark;
+  }
+  .btn-sun {
+    @apply bg-sun text-ink hover:bg-sun-deep;
+  }
+  .btn-palm {
+    @apply bg-palm text-white hover:bg-[#257455];
+  }
+  .btn-ghost {
+    @apply bg-transparent text-ink shadow-none border-ink/30 hover:bg-ink/5;
+  }
+  .btn-ghost:active {
+    @apply translate-x-0 translate-y-0;
+  }
+  .btn-outline-mar {
+    @apply bg-transparent text-mar shadow-none border-mar hover:bg-mar/10;
+  }
+  .btn-outline-mar:active {
+    @apply translate-x-0 translate-y-0;
+  }
+
+  /* Campos de formulario */
+  .input {
+    @apply w-full rounded-lg border-2 border-ink/20 bg-white px-3 py-2.5 text-sm outline-none transition-colors focus:border-mar;
+  }
+
+  /* Tarjetas de papel */
+  .card {
+    @apply rounded-xl border-2 border-ink/10 bg-paper2 transition-all;
+  }
+  .card-hover {
+    @apply hover:border-ink hover:shadow-[3px_3px_0_#21322f] hover:-translate-y-0.5;
+  }
+
+  /* Enlaces de categorías con subrayado ondulado */
+  .cat-link {
+    @apply text-ink-soft transition-colors hover:text-ink;
+  }
+  .cat-link:hover {
+    text-decoration: underline wavy var(--color-coral) 2px;
+    text-underline-offset: 5px;
+  }
+
+  /* Frisa de azulejos cubanos (vajilla de "pétalos") */
+  .tile-strip {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Crect width='56' height='56' fill='%23fbf3e4'/%3E%3Ccircle cx='0' cy='0' r='18' fill='%230e5e70'/%3E%3Ccircle cx='56' cy='0' r='18' fill='%230e5e70'/%3E%3Ccircle cx='0' cy='56' r='18' fill='%230e5e70'/%3E%3Ccircle cx='56' cy='56' r='18' fill='%230e5e70'/%3E%3Ccircle cx='28' cy='28' r='11' fill='%23f2604d'/%3E%3Ccircle cx='28' cy='28' r='4' fill='%23fbf3e4'/%3E%3C/svg%3E");
+    background-size: 56px 56px;
+  }
+  .tile-strip-dark {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Crect width='56' height='56' fill='%230a4a59'/%3E%3Ccircle cx='0' cy='0' r='18' fill='%23ffc53d'/%3E%3Ccircle cx='56' cy='0' r='18' fill='%23ffc53d'/%3E%3Ccircle cx='0' cy='56' r='18' fill='%23ffc53d'/%3E%3Ccircle cx='56' cy='56' r='18' fill='%23ffc53d'/%3E%3Ccircle cx='28' cy='28' r='11' fill='%23f2604d'/%3E%3Ccircle cx='28' cy='28' r='4' fill='%230a4a59'/%3E%3C/svg%3E");
+    background-size: 56px 56px;
+  }
 }
 
 /* Scroll horizontal discreto para la barra de categorías */

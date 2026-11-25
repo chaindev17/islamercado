@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import Logo from "@/components/Logo";
 
 export default function RegistroPage() {
   const router = useRouter();
@@ -72,39 +73,42 @@ export default function RegistroPage() {
 
   return (
     <div className="max-w-md mx-auto px-4 py-10">
-      <div className="bg-white rounded-md shadow-sm p-6 sm:p-8">
-        <h1 className="text-xl font-semibold text-gray-800 mb-1">
-          Creá tu cuenta
+      <div className="card p-6 sm:p-8">
+        <div className="flex justify-center mb-4">
+          <Logo />
+        </div>
+        <h1 className="font-display text-2xl font-extrabold text-ink text-center">
+          Crea tu cuenta
         </h1>
-        <p className="text-sm text-gray-500 mb-6">
+        <p className="text-sm text-ink-soft text-center mt-1 mb-6">
           Publicar anuncios en IslaMercado es gratis 🌴
         </p>
 
         <form onSubmit={submit} className="flex flex-col gap-4">
           <label className="flex flex-col gap-1 text-sm">
-            <span className="text-gray-600">Nombre de usuario *</span>
+            <span className="text-ink font-medium">Nombre de usuario *</span>
             <input
               type="text"
               required
               value={form.username}
               onChange={set("username")}
               placeholder="ej: maria_habana"
-              className="border border-gray-300 rounded px-3 py-2.5 outline-none focus:border-brand-blue"
+              className="input"
             />
           </label>
           <label className="flex flex-col gap-1 text-sm">
-            <span className="text-gray-600">Correo electrónico *</span>
+            <span className="text-ink font-medium">Correo electrónico *</span>
             <input
               type="email"
               required
               value={form.email}
               onChange={set("email")}
               placeholder="tucorreo@ejemplo.com"
-              className="border border-gray-300 rounded px-3 py-2.5 outline-none focus:border-brand-blue"
+              className="input"
             />
           </label>
           <label className="flex flex-col gap-1 text-sm">
-            <span className="text-gray-600">Contraseña *</span>
+            <span className="text-ink font-medium">Contraseña *</span>
             <input
               type="password"
               required
@@ -112,32 +116,33 @@ export default function RegistroPage() {
               value={form.password}
               onChange={set("password")}
               placeholder="Mínimo 6 caracteres"
-              className="border border-gray-300 rounded px-3 py-2.5 outline-none focus:border-brand-blue"
+              className="input"
             />
           </label>
           <label className="flex flex-col gap-1 text-sm">
-            <span className="text-gray-600">
-              Teléfono / WhatsApp <span className="text-gray-400">(opcional)</span>
+            <span className="text-ink font-medium">
+              Teléfono / WhatsApp{" "}
+              <span className="text-ink-soft font-normal">(opcional)</span>
             </span>
             <input
               type="tel"
               value={form.phone}
               onChange={set("phone")}
               placeholder="ej: 5 123 4567"
-              className="border border-gray-300 rounded px-3 py-2.5 outline-none focus:border-brand-blue"
+              className="input"
             />
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-ink-soft/80">
               Se muestra en tus anuncios para que te contacten.
             </span>
           </label>
 
           {error && (
-            <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded px-3 py-2">
+            <p className="text-sm text-coral-dark bg-coral/10 border-2 border-coral/40 rounded-lg px-3 py-2">
               {error}
             </p>
           )}
           {info && (
-            <p className="text-sm text-green-700 bg-green-50 border border-green-200 rounded px-3 py-2">
+            <p className="text-sm text-palm bg-palm/10 border-2 border-palm/40 rounded-lg px-3 py-2">
               {info}
             </p>
           )}
@@ -145,15 +150,18 @@ export default function RegistroPage() {
           <button
             type="submit"
             disabled={busy}
-            className="bg-brand-blue hover:bg-brand-blue-dark disabled:opacity-60 text-white font-semibold rounded py-2.5 transition-colors"
+            className="btn btn-coral w-full text-base py-2.5"
           >
             {busy ? "Creando cuenta…" : "Crear cuenta"}
           </button>
         </form>
 
-        <p className="text-sm text-gray-600 mt-6 text-center">
+        <p className="text-sm text-ink-soft mt-6 text-center">
           ¿Ya tienes cuenta?{" "}
-          <Link href="/login" className="text-brand-blue hover:underline font-medium">
+          <Link
+            href="/login"
+            className="text-mar hover:text-mar-dark font-semibold underline decoration-wavy decoration-coral/70 underline-offset-4"
+          >
             Entra aquí
           </Link>
         </p>
