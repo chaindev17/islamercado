@@ -12,7 +12,9 @@ export default function PublicarPage() {
   const fileRef = useRef<HTMLInputElement>(null);
 
   const [checked, setChecked] = useState(false);
-  const [cats, setCats] = useState<{ id: number; slug: string; name: string; icon: string }[]>([]);
+  const [cats, setCats] = useState<
+    { id: number; slug: string; name: string; icon: string }[]
+  >([]);
   const [form, setForm] = useState({
     title: "",
     categoryId: "",
@@ -57,10 +59,7 @@ export default function PublicarPage() {
     setChecked(true);
   }, [router]);
 
-  function set<K extends keyof typeof form>(
-    k: K,
-    value: (typeof form)[K]
-  ) {
+  function set<K extends keyof typeof form>(k: K, value: (typeof form)[K]) {
     setForm((f) => ({ ...f, [k]: value }));
   }
 
@@ -158,7 +157,10 @@ export default function PublicarPage() {
       }
     }
     if (urls.length > 0) {
-      await supabase.from("listings").update({ images: urls }).eq("id", created.id);
+      await supabase
+        .from("listings")
+        .update({ images: urls })
+        .eq("id", created.id);
     }
     if (form.phone.trim()) {
       await supabase
@@ -172,29 +174,26 @@ export default function PublicarPage() {
 
   if (!checked) {
     return (
-      <div className="max-w-2xl mx-auto px-4 py-16 text-center text-gray-500 text-sm">
+      <div className="max-w-2xl mx-auto px-4 py-16 text-center text-ink-soft text-sm">
         Cargando…
       </div>
     );
   }
 
-  const inputCls =
-    "border border-gray-300 rounded px-3 py-2.5 outline-none focus:border-brand-blue w-full";
-
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
-      <div className="bg-white rounded-md shadow-sm p-6 sm:p-8">
-        <h1 className="text-xl font-semibold text-gray-800">
+      <div className="card p-6 sm:p-8">
+        <h1 className="font-display text-2xl font-extrabold text-ink">
           Publicar un anuncio
         </h1>
-        <p className="text-sm text-gray-500 mb-6">
+        <p className="text-sm text-ink-soft mt-1 mb-6">
           Es gratis. Entre más claro y detallado, más rápido vendes 🌴
         </p>
 
         <form onSubmit={submit} className="flex flex-col gap-4">
           <label className="flex flex-col gap-1 text-sm">
-            <span className="text-gray-600">
-              Título <span className="text-red-500">*</span>
+            <span className="text-ink font-medium">
+              Título <span className="text-coral">*</span>
             </span>
             <input
               type="text"
@@ -203,20 +202,20 @@ export default function PublicarPage() {
               value={form.title}
               onChange={(e) => set("title", e.target.value)}
               placeholder="ej: iPhone 12 128GB con caja y cargador"
-              className={inputCls}
+              className="input"
             />
           </label>
 
           <div className="grid sm:grid-cols-2 gap-4">
             <label className="flex flex-col gap-1 text-sm">
-              <span className="text-gray-600">
-                Categoría <span className="text-red-500">*</span>
+              <span className="text-ink font-medium">
+                Categoría <span className="text-coral">*</span>
               </span>
               <select
                 required
                 value={form.categoryId}
                 onChange={(e) => set("categoryId", e.target.value)}
-                className={inputCls}
+                className="input"
               >
                 <option value="">Elegir…</option>
                 {cats.map((c) => (
@@ -228,8 +227,8 @@ export default function PublicarPage() {
             </label>
 
             <label className="flex flex-col gap-1 text-sm">
-              <span className="text-gray-600">
-                Precio (USD) <span className="text-red-500">*</span>
+              <span className="text-ink font-medium">
+                Precio (USD) <span className="text-coral">*</span>
               </span>
               <input
                 type="number"
@@ -240,18 +239,18 @@ export default function PublicarPage() {
                 value={form.price}
                 onChange={(e) => set("price", e.target.value)}
                 placeholder="ej: 250"
-                className={inputCls}
+                className="input"
               />
             </label>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4">
             <label className="flex flex-col gap-1 text-sm">
-              <span className="text-gray-600">Condición</span>
+              <span className="text-ink font-medium">Condición</span>
               <select
                 value={form.condition}
                 onChange={(e) => set("condition", e.target.value)}
-                className={inputCls}
+                className="input"
               >
                 {CONDITIONS.map((c) => (
                   <option key={c.value} value={c.value}>
@@ -262,14 +261,14 @@ export default function PublicarPage() {
             </label>
 
             <label className="flex flex-col gap-1 text-sm">
-              <span className="text-gray-600">
-                Provincia <span className="text-red-500">*</span>
+              <span className="text-ink font-medium">
+                Provincia <span className="text-coral">*</span>
               </span>
               <select
                 required
                 value={form.province}
                 onChange={(e) => set("province", e.target.value)}
-                className={inputCls}
+                className="input"
               >
                 <option value="">Elegir…</option>
                 {PROVINCES.map((p) => (
@@ -282,29 +281,29 @@ export default function PublicarPage() {
           </div>
 
           <label className="flex flex-col gap-1 text-sm">
-            <span className="text-gray-600">Ciudad o municipio</span>
+            <span className="text-ink font-medium">Ciudad o municipio</span>
             <input
               type="text"
               value={form.city}
               onChange={(e) => set("city", e.target.value)}
               placeholder="ej: Centro Habana"
-              className={inputCls}
+              className="input"
             />
           </label>
 
           <label className="flex flex-col gap-1 text-sm">
-            <span className="text-gray-600">Descripción</span>
+            <span className="text-ink font-medium">Descripción</span>
             <textarea
               rows={5}
               value={form.description}
               onChange={(e) => set("description", e.target.value)}
               placeholder="Describe el estado, lo que incluye, detalles de uso, formas de entrega…"
-              className={inputCls}
+              className="input"
             />
           </label>
 
           <label className="flex flex-col gap-1 text-sm">
-            <span className="text-gray-600">
+            <span className="text-ink font-medium">
               Teléfono / WhatsApp de contacto
             </span>
             <input
@@ -312,16 +311,16 @@ export default function PublicarPage() {
               value={form.phone}
               onChange={(e) => set("phone", e.target.value)}
               placeholder="ej: 5 123 4567"
-              className={inputCls}
+              className="input"
             />
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-ink-soft/80">
               Se guarda en tu perfil y aparece en este anuncio.
             </span>
           </label>
 
           {/* Imágenes */}
           <div className="flex flex-col gap-2 text-sm">
-            <span className="text-gray-600">
+            <span className="text-ink font-medium">
               Fotos ({files.length}/{MAX_IMAGES})
             </span>
             {files.length > 0 && (
@@ -332,13 +331,13 @@ export default function PublicarPage() {
                     <img
                       src={src}
                       alt={`Foto ${i + 1}`}
-                      className="w-full aspect-square object-cover rounded border border-gray-200"
+                      className="w-full aspect-square object-cover rounded-lg border-2 border-ink/15"
                     />
                     <button
                       type="button"
                       onClick={() => removeFile(i)}
                       aria-label={`Quitar foto ${i + 1}`}
-                      className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-white border border-gray-300 rounded-full text-gray-600 text-xs leading-none shadow hover:bg-red-50"
+                      className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-paper2 border-2 border-ink rounded-full text-ink text-xs leading-none shadow-[1px_1px_0_#21322f] hover:bg-coral hover:text-white"
                     >
                       ×
                     </button>
@@ -353,25 +352,25 @@ export default function PublicarPage() {
               multiple
               onChange={addFiles}
               disabled={files.length >= MAX_IMAGES}
-              className="text-sm text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded file:border-0 file:bg-brand-yellow file:text-gray-800 file:font-semibold file:cursor-pointer"
+              className="text-sm text-ink-soft file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-2 file:border-ink file:bg-sun file:text-ink file:font-semibold file:cursor-pointer file:shadow-[2px_2px_0_#21322f]"
             />
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-ink-soft/80">
               Hasta {MAX_IMAGES} fotos. La primera será la foto principal.
             </span>
           </div>
 
-          <label className="flex items-center gap-2 text-sm text-gray-700">
+          <label className="flex items-center gap-2 text-sm text-ink">
             <input
               type="checkbox"
               checked={form.negotiable}
               onChange={(e) => set("negotiable", e.target.checked)}
-              className="w-4 h-4 accent-[#3483fa]"
+              className="w-4 h-4 accent-[#f2604d]"
             />
             El precio es negociable
           </label>
 
           {error && (
-            <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded px-3 py-2">
+            <p className="text-sm text-coral-dark bg-coral/10 border-2 border-coral/40 rounded-lg px-3 py-2">
               {error}
             </p>
           )}
@@ -379,7 +378,7 @@ export default function PublicarPage() {
           <button
             type="submit"
             disabled={busy}
-            className="bg-brand-blue hover:bg-brand-blue-dark disabled:opacity-60 text-white font-semibold rounded py-3 transition-colors"
+            className="btn btn-coral w-full text-base py-3"
           >
             {busy ? "Publicando…" : "Publicar anuncio"}
           </button>

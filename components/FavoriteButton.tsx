@@ -53,8 +53,7 @@ export default function FavoriteButton({
     setBusy(false);
   }
 
-  const size = big ? "w-10 h-10" : "w-8 h-8";
-  const icon = big ? "w-6 h-6" : "w-5 h-5";
+  const size = big ? "w-11 h-11" : "w-8 h-8";
 
   return (
     <button
@@ -62,16 +61,20 @@ export default function FavoriteButton({
       aria-label={active ? "Quitar de favoritos" : "Agregar a favoritos"}
       aria-pressed={active}
       title={active ? "Quitar de favoritos" : "Agregar a favoritos"}
-      className={`${size} ${icon} shrink-0 flex items-center justify-center bg-white/95 rounded-full shadow-[0_1px_4px_rgba(0,0,0,0.2)] hover:scale-110 active:scale-95 transition-transform ${big ? "" : ""}`}
+      className={`${size} shrink-0 flex items-center justify-center bg-paper2 rounded-full border-2 ${
+        active
+          ? "border-coral"
+          : "border-ink/20 hover:border-coral"
+      } transition-colors`}
     >
       <svg
         viewBox="0 0 24 24"
-        fill={active ? "#e62450" : "none"}
-        stroke={active ? "#e62450" : "#737373"}
+        fill={active ? "#f2604d" : "none"}
+        stroke={active ? "#f2604d" : "#5c6b66"}
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="w-[70%] h-[70%]"
+        className="w-[60%] h-[60%]"
         aria-hidden
       >
         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />

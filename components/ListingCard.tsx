@@ -20,7 +20,7 @@ function Placeholder() {
       <svg
         viewBox="0 0 24 24"
         fill="currentColor"
-        className="w-14 h-14 text-gray-300"
+        className="w-14 h-14 text-ink/15"
         aria-hidden
       >
         <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
@@ -41,9 +41,9 @@ export default function ListingCard({
   return (
     <Link
       href={`/listing/${listing.id}`}
-      className="group bg-white rounded-md overflow-hidden shadow-[0_1px_2px_rgba(0,0,0,0.12)] hover:shadow-[0_6px_16px_rgba(0,0,0,0.18)] transition-shadow flex flex-col"
+      className="group card card-hover overflow-hidden flex flex-col"
     >
-      <div className="aspect-[4/3] bg-[#f7f7f7] relative overflow-hidden">
+      <div className="aspect-[4/3] bg-sand/60 relative overflow-hidden border-b-2 border-ink/10">
         <div className="absolute top-2 right-2 z-10">
           <FavoriteButton
             listingId={listing.id}
@@ -62,22 +62,22 @@ export default function ListingCard({
           <Placeholder />
         )}
         {listing.condition === "nuevo" && (
-          <span className="absolute top-2 left-2 bg-brand-blue text-white text-[11px] font-semibold px-2 py-0.5 rounded">
+          <span className="absolute top-2 left-2 bg-sun text-ink text-[11px] font-bold px-2 py-0.5 rounded-full border border-ink">
             Nuevo
           </span>
         )}
       </div>
       <div className="p-3 flex flex-col gap-1 grow">
-        <p className="text-xl text-gray-900 leading-tight">
+        <p className="font-display text-xl font-extrabold text-ink leading-tight">
           {formatPrice(listing.price_usd)}
         </p>
         {listing.negotiable && (
-          <span className="text-xs text-brand-green font-semibold">
-            Precio negociable
+          <span className="text-xs text-palm font-semibold">
+            ✔ Precio negociable
           </span>
         )}
-        <p className="text-sm text-gray-700 line-clamp-2">{listing.title}</p>
-        <p className="text-xs text-gray-400 mt-auto pt-1">
+        <p className="text-sm text-ink line-clamp-2">{listing.title}</p>
+        <p className="text-xs text-ink-soft mt-auto pt-1">
           {[listing.city, listing.province].filter(Boolean).join(", ")}
         </p>
       </div>

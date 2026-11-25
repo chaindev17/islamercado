@@ -96,7 +96,9 @@ export default function MensajesPage() {
         }
       }
 
-      const listingIds = [...new Set([...map.values()].map((t) => t.listingId))];
+      const listingIds = [
+        ...new Set([...map.values()].map((t) => t.listingId)),
+      ];
       const peerIds = [...new Set([...map.values()].map((t) => t.peerId))];
 
       const [{ data: listings }, { data: profiles }] = await Promise.all([
@@ -111,7 +113,11 @@ export default function MensajesPage() {
       const lmap = new Map(
         (listings ?? []).map((l) => [
           l.id,
-          { title: l.title, price: Number(l.price_usd), img: l.images?.[0] ?? null },
+          {
+            title: l.title,
+            price: Number(l.price_usd),
+            img: l.images?.[0] ?? null,
+          },
         ])
       );
       const pmap = new Map(
@@ -142,42 +148,43 @@ export default function MensajesPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
-      <div className="bg-white rounded-md shadow-sm p-4 sm:p-6">
-        <h1 className="text-xl font-semibold text-gray-800 mb-1">Mensajes 💬</h1>
-        <p className="text-sm text-gray-500 mb-5">
-          Conversaciones con compradores y vendedores.
+      <div className="card p-4 sm:p-6">
+        <h1 className="font-display text-2xl font-extrabold text-ink">
+          Mensajes 💬
+        </h1>
+        <p className="text-sm text-ink-soft mt-1 mb-5">
+          Conversaciones con compradores y vendedores de la isla.
         </p>
 
         {loading ? (
-          <p className="text-sm text-gray-400 py-8 text-center">Cargando…</p>
+          <p className="text-sm text-ink-soft/70 py-8 text-center">
+            Cargando…
+          </p>
         ) : threads.length === 0 ? (
-          <div className="py-10 text-center text-gray-500">
+          <div className="py-10 text-center text-ink-soft">
             <p className="text-4xl mb-3" aria-hidden>
               🗨️
             </p>
-            <p className="font-medium text-gray-700 mb-1">
+            <p className="font-semibold text-ink mb-1">
               Todavía no tienes conversaciones
             </p>
             <p className="text-sm">
               Escribe al vendedor desde cualquier publicación con el botón{" "}
-              <span className="font-medium text-gray-700">💬 Chatear</span>.
+              <span className="font-medium text-ink">💬 Chatear</span>.
             </p>
-            <Link
-              href="/buscar"
-              className="inline-block mt-4 bg-brand-blue hover:bg-brand-blue-dark text-white text-sm font-semibold rounded px-5 py-2.5 transition-colors"
-            >
+            <Link href="/buscar" className="btn btn-mar mt-4">
               Explorar publicaciones
             </Link>
           </div>
         ) : (
-          <ul className="flex flex-col divide-y divide-gray-100">
+          <ul className="flex flex-col divide-y divide-ink/10">
             {threads.map((t) => (
               <li key={t.key}>
                 <Link
                   href={`/mensajes/${t.listingId}/${t.peerId}`}
-                  className="flex items-center gap-3 py-3 px-1 hover:bg-gray-50 rounded-md transition-colors"
+                  className="flex items-center gap-3 py-3 px-1 hover:bg-sand/50 rounded-lg transition-colors"
                 >
-                  <div className="w-12 h-12 rounded overflow-hidden bg-[#f7f7f7] shrink-0">
+                  <div className="w-12 h-12 rounded-lg overflow-hidden bg-sand/70 border border-ink/10 shrink-0">
                     {t.listingImage ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
@@ -186,7 +193,7 @@ export default function MensajesPage() {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-gray-300 text-xl">
+                      <div className="w-full h-full flex items-center justify-center text-ink/20 text-xl">
                         🖼️
                       </div>
                     )}
@@ -194,28 +201,28 @@ export default function MensajesPage() {
                   <div className="min-w-0 grow">
                     <div className="flex items-center gap-2">
                       <p
-                        className={`text-sm truncate ${t.unread > 0 ? "font-bold text-gray-900" : "font-medium text-gray-800"}`}
+                        className={`text-sm truncate ${t.unread > 0 ? "font-bold text-ink" : "font-medium text-ink"}`}
                       >
                         {t.peerName}
                       </p>
-                      <span className="text-xs text-gray-400 shrink-0">
+                      <span className="text-xs text-ink-soft/80 shrink-0">
                         {timeAgo(t.lastAt)}
                       </span>
                     </div>
-                    <p className="text-xs text-gray-500 truncate">
+                    <p className="text-xs text-ink-soft truncate">
                       {t.listingTitle} · {formatPrice(t.listingPrice)}
                     </p>
                     <p
-                      className={`text-sm truncate mt-0.5 ${t.unread > 0 ? "text-gray-900 font-semibold" : "text-gray-500"}`}
+                      className={`text-sm truncate mt-0.5 ${t.unread > 0 ? "text-ink font-semibold" : "text-ink-soft"}`}
                     >
                       {t.mineLast && (
-                        <span className="text-gray-400">Tú: </span>
+                        <span className="text-ink-soft/70">Tú: </span>
                       )}
                       {t.lastBody}
                     </p>
                   </div>
                   {t.unread > 0 && (
-                    <span className="shrink-0 min-w-[22px] h-[22px] px-1.5 bg-[#e62450] text-white text-xs font-bold rounded-full flex items-center justify-center">
+                    <span className="shrink-0 min-w-[22px] h-[22px] px-1.5 bg-coral text-white text-xs font-bold rounded-full border-2 border-ink flex items-center justify-center">
                       {t.unread}
                     </span>
                   )}

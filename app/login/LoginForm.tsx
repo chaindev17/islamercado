@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import Logo from "@/components/Logo";
 
 export default function LoginForm({ next }: { next: string }) {
   const router = useRouter();
@@ -36,40 +37,43 @@ export default function LoginForm({ next }: { next: string }) {
 
   return (
     <div className="max-w-md mx-auto px-4 py-10">
-      <div className="bg-white rounded-md shadow-sm p-6 sm:p-8">
-        <h1 className="text-xl font-semibold text-gray-800 mb-1">
-          Entrá a tu cuenta
+      <div className="card p-6 sm:p-8">
+        <div className="flex justify-center mb-4">
+          <Logo />
+        </div>
+        <h1 className="font-display text-2xl font-extrabold text-ink text-center">
+          Entra a tu cuenta
         </h1>
-        <p className="text-sm text-gray-500 mb-6">
-          Comprá y vendé en toda la isla 🌴
+        <p className="text-sm text-ink-soft text-center mt-1 mb-6">
+          Compra y vende en toda la isla 🌴
         </p>
 
         <form onSubmit={submit} className="flex flex-col gap-4">
           <label className="flex flex-col gap-1 text-sm">
-            <span className="text-gray-600">Correo electrónico</span>
+            <span className="text-ink font-medium">Correo electrónico</span>
             <input
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="tucorreo@ejemplo.com"
-              className="border border-gray-300 rounded px-3 py-2.5 outline-none focus:border-brand-blue"
+              className="input"
             />
           </label>
           <label className="flex flex-col gap-1 text-sm">
-            <span className="text-gray-600">Contraseña</span>
+            <span className="text-ink font-medium">Contraseña</span>
             <input
               type="password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="border border-gray-300 rounded px-3 py-2.5 outline-none focus:border-brand-blue"
+              className="input"
             />
           </label>
 
           {error && (
-            <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded px-3 py-2">
+            <p className="text-sm text-coral-dark bg-coral/10 border-2 border-coral/40 rounded-lg px-3 py-2">
               {error}
             </p>
           )}
@@ -77,15 +81,18 @@ export default function LoginForm({ next }: { next: string }) {
           <button
             type="submit"
             disabled={busy}
-            className="bg-brand-blue hover:bg-brand-blue-dark disabled:opacity-60 text-white font-semibold rounded py-2.5 transition-colors"
+            className="btn btn-mar w-full text-base py-2.5"
           >
             {busy ? "Entrando…" : "Entrar"}
           </button>
         </form>
 
-        <p className="text-sm text-gray-600 mt-6 text-center">
+        <p className="text-sm text-ink-soft mt-6 text-center">
           ¿Todavía no tienes cuenta?{" "}
-          <Link href="/registro" className="text-brand-blue hover:underline font-medium">
+          <Link
+            href="/registro"
+            className="text-mar hover:text-mar-dark font-semibold underline decoration-wavy decoration-coral/70 underline-offset-4"
+          >
             Regístrate gratis
           </Link>
         </p>

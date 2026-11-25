@@ -48,49 +48,83 @@ export default function HomePage() {
 
   return (
     <div className="pb-10">
-      {/* Hero */}
-      <section className="bg-brand-yellow">
-        <div className="max-w-[1200px] mx-auto px-4 py-10 sm:py-14 flex flex-col items-center gap-4 text-center">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 max-w-2xl leading-tight">
-            Todo lo que buscas, en una sola isla 🌴
-          </h1>
-          <p className="text-gray-700 text-sm sm:text-base">
-            Compra y vende en toda Cuba. Publicar es gratis.
-          </p>
-          <div className="w-full max-w-2xl">
-            <SearchBar size="lg" />
-          </div>
-          <div className="flex flex-wrap justify-center gap-2 pt-1">
-            {categories.slice(0, 8).map((c) => (
+      {/* Hero — El Malecón */}
+      <section className="relative">
+        <div className="h-2.5 tile-strip" aria-hidden />
+        <div className="max-w-[1200px] mx-auto px-4 py-8 sm:py-12 grid lg:grid-cols-[1.1fr_1fr] gap-8 items-center">
+          <div className="flex flex-col gap-4">
+            <h1 className="font-display text-4xl sm:text-5xl font-black text-ink leading-[1.05]">
+              El mercado de{" "}
+              <span className="text-coral">toda la isla</span>, del malecón a
+              tu puerta
+            </h1>
+            <p className="text-ink-soft text-base sm:text-lg">
+              Compra y vende en toda Cuba. Publica gratis, chatea sin vueltas
+              y coordina tu trato. 🎵
+            </p>
+            <div className="max-w-xl">
+              <SearchBar size="lg" />
+            </div>
+            <div className="flex flex-wrap gap-2 pt-1">
+              {categories.slice(0, 6).map((c) => (
+                <Link
+                  key={c.slug}
+                  href={`/buscar?cat=${c.slug}`}
+                  className="bg-white text-ink text-xs font-medium rounded-full px-3 py-1.5 border-2 border-ink/15 hover:border-coral hover:text-coral-dark transition-colors"
+                >
+                  {c.icon} {c.name}
+                </Link>
+              ))}
               <Link
-                key={c.slug}
-                href={`/buscar?cat=${c.slug}`}
-                className="bg-white/90 hover:bg-white text-gray-700 text-xs font-medium rounded-full px-3 py-1.5 shadow-sm transition-colors"
+                href="/buscar"
+                className="text-xs font-semibold text-mar hover:text-mar-dark rounded-full px-2 py-1.5 underline decoration-wavy decoration-coral/70 underline-offset-4"
               >
-                {c.icon} {c.name}
+                Ver las 18 categorías
               </Link>
-            ))}
+            </div>
+            <p className="text-xs text-ink-soft/80 pt-1">
+              🌴 16 provincias · 📢 Publicar es gratis · 💬 Chat entre vecinos
+            </p>
+          </div>
+
+          <div className="card overflow-hidden shadow-[4px_4px_0_#21322f] rotate-[0.6deg]">
+            <div className="relative aspect-[16/10] bg-sand">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/hero-malecon.jpg"
+                alt="Ilustración del Malecón de La Habana con un auto clásico"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="px-4 py-2.5 flex items-center justify-between border-t-2 border-ink/10 bg-paper2">
+              <p className="text-xs font-semibold text-ink">
+                El Malecón — punto de encuentro de la isla
+              </p>
+              <span className="text-sun" aria-hidden>
+                ☀️
+              </span>
+            </div>
           </div>
         </div>
       </section>
 
       <div className="max-w-[1200px] mx-auto px-3 sm:px-4">
         {/* Categorías */}
-        <section className="mt-8">
-          <h2 className="text-lg font-semibold text-gray-800 mb-3">
-            Explorá por categorías
+        <section className="mt-6">
+          <h2 className="font-display text-xl sm:text-2xl font-extrabold text-ink mb-4">
+            ¿Qué buscas hoy?
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             {categories.map((c) => (
               <Link
                 key={c.slug}
                 href={`/buscar?cat=${c.slug}`}
-                className="bg-white rounded-md p-4 flex flex-col items-center gap-2 shadow-[0_1px_2px_rgba(0,0,0,0.12)] hover:shadow-[0_6px_16px_rgba(0,0,0,0.18)] transition-shadow"
+                className="card card-hover p-4 flex flex-col items-center gap-2"
               >
                 <span className="text-3xl" aria-hidden>
                   {c.icon}
                 </span>
-                <span className="text-xs text-center text-gray-700 leading-snug">
+                <span className="text-xs text-center text-ink leading-snug font-medium">
                   {c.name}
                 </span>
               </Link>
@@ -100,13 +134,13 @@ export default function HomePage() {
 
         {/* Publicaciones recientes */}
         <section className="mt-10">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-lg font-semibold text-gray-800">
-              Publicaciones recientes
+          <div className="flex items-end justify-between mb-4">
+            <h2 className="font-display text-xl sm:text-2xl font-extrabold text-ink">
+              Recién llegados a la vitrina
             </h2>
             <Link
               href="/buscar"
-              className="text-sm text-brand-blue hover:underline"
+              className="text-sm font-semibold text-mar hover:text-mar-dark underline decoration-wavy decoration-coral/70 underline-offset-4"
             >
               Ver todas
             </Link>
@@ -115,26 +149,26 @@ export default function HomePage() {
           {loading ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
               {Array.from({ length: 8 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="bg-white rounded-md overflow-hidden shadow-sm"
-                >
-                  <div className="aspect-[4/3] bg-gray-100 animate-pulse" />
+                <div key={i} className="card overflow-hidden">
+                  <div className="aspect-[4/3] bg-sand/70 animate-pulse" />
                   <div className="p-3 space-y-2">
-                    <div className="h-5 w-1/2 bg-gray-100 rounded animate-pulse" />
-                    <div className="h-4 w-full bg-gray-100 rounded animate-pulse" />
-                    <div className="h-3 w-2/3 bg-gray-100 rounded animate-pulse" />
+                    <div className="h-6 w-1/2 bg-sand rounded animate-pulse" />
+                    <div className="h-4 w-full bg-sand rounded animate-pulse" />
+                    <div className="h-3 w-2/3 bg-sand rounded animate-pulse" />
                   </div>
                 </div>
               ))}
             </div>
           ) : listings.length === 0 ? (
-            <div className="bg-white rounded-md p-10 text-center text-gray-500 shadow-sm">
+            <div className="card p-10 text-center text-ink-soft">
               <p className="text-3xl mb-2" aria-hidden>
                 📦
               </p>
               Todavía no hay publicaciones. ¡Sé el primero en{" "}
-              <Link href="/publicar" className="text-brand-blue hover:underline">
+              <Link
+                href="/publicar"
+                className="text-mar hover:text-mar-dark font-semibold underline decoration-wavy decoration-coral/70 underline-offset-4"
+              >
                 publicar algo
               </Link>
               !

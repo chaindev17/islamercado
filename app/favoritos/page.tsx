@@ -61,38 +61,35 @@ export default function FavoritosPage() {
     <div className="max-w-[1200px] mx-auto px-3 sm:px-4 py-6">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h1 className="text-xl font-semibold text-gray-800">
+          <h1 className="font-display text-2xl font-extrabold text-ink">
             Tus favoritos ♥
           </h1>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-ink-soft">
             Las publicaciones que guardaste para volver a ver.
           </p>
         </div>
         <Link
           href="/buscar"
-          className="text-sm text-brand-blue hover:underline shrink-0"
+          className="text-sm font-semibold text-mar hover:text-mar-dark underline decoration-wavy decoration-coral/70 underline-offset-4 shrink-0"
         >
           Explorar más
         </Link>
       </div>
 
       {loading ? (
-        <p className="text-sm text-gray-400 py-10 text-center">Cargando…</p>
+        <p className="text-sm text-ink-soft/70 py-10 text-center">Cargando…</p>
       ) : items.length === 0 ? (
-        <div className="bg-white rounded-md shadow-sm p-12 text-center text-gray-500">
+        <div className="card p-12 text-center text-ink-soft">
           <p className="text-4xl mb-3" aria-hidden>
             💔
           </p>
-          <p className="font-medium text-gray-700 mb-1">
+          <p className="font-semibold text-ink mb-1">
             Todavía no tienes favoritos
           </p>
           <p className="text-sm">
             Toca el ♥ en cualquier publicación para guardarla aquí.
           </p>
-          <Link
-            href="/buscar"
-            className="inline-block mt-4 bg-brand-blue hover:bg-brand-blue-dark text-white text-sm font-semibold rounded px-5 py-2.5 transition-colors"
-          >
+          <Link href="/buscar" className="btn btn-mar mt-4">
             Explorar publicaciones
           </Link>
         </div>

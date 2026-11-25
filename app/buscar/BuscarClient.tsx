@@ -5,7 +5,12 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import ListingCard, { type ListingCardData } from "@/components/ListingCard";
-import { CONDITIONS, PROVINCES, FALLBACK_CATEGORIES, type Category } from "@/lib/constants";
+import {
+  CONDITIONS,
+  PROVINCES,
+  FALLBACK_CATEGORIES,
+  type Category,
+} from "@/lib/constants";
 
 const SORTS = [
   { key: "recientes", label: "Más recientes" },
@@ -40,17 +45,6 @@ export default function BuscarClient() {
         .eq("user_id", data.user.id);
       setFavs(new Set((favs ?? []).map((f) => f.listing_id)));
     });
-  }, []);
-
-  useEffect(() => {
-    const supabase = createClient();
-    supabase
-      .from("categories")
-      .select("slug, name, icon")
-      .order("id")
-      .then(({ data }) => {
-        if (data && data.length) setCategories(data);
-      });
   }, []);
 
   useEffect(() => {
@@ -113,8 +107,8 @@ export default function BuscarClient() {
 
   return (
     <div className="max-w-[1200px] mx-auto px-3 sm:px-4 py-4">
-      <p className="text-xs text-gray-500 mb-3">
-        <Link href="/" className="hover:text-brand-blue">
+      <p className="text-xs text-ink-soft mb-3">
+        <Link href="/" className="hover:text-mar">
           Inicio
         </Link>
         {" › "}
@@ -128,18 +122,16 @@ export default function BuscarClient() {
         <form
           action="/buscar"
           method="get"
-          className="bg-white rounded-md shadow-sm p-4 flex flex-col gap-3 text-sm"
+          className="card p-4 flex flex-col gap-3 text-sm"
         >
           {q && <input type="hidden" name="q" value={q} />}
-          <p className="font-semibold text-gray-800">Filtros</p>
+          <p className="font-display font-extrabold text-ink text-base">
+            Filtra tu búsqueda
+          </p>
 
           <label className="flex flex-col gap-1">
-            <span className="text-gray-500 text-xs">Categoría</span>
-            <select
-              name="cat"
-              defaultValue={cat}
-              className="border border-gray-300 rounded px-2 py-2"
-            >
+            <span className="text-ink-soft text-xs font-medium">Categoría</span>
+            <select name="cat" defaultValue={cat} className="input">
               <option value="">Todas</option>
               {categories.map((c) => (
                 <option key={c.slug} value={c.slug}>
@@ -150,12 +142,8 @@ export default function BuscarClient() {
           </label>
 
           <label className="flex flex-col gap-1">
-            <span className="text-gray-500 text-xs">Provincia</span>
-            <select
-              name="prov"
-              defaultValue={prov}
-              className="border border-gray-300 rounded px-2 py-2"
-            >
+            <span className="text-ink-soft text-xs font-medium">Provincia</span>
+            <select name="prov" defaultValue={prov} className="input">
               <option value="">Toda Cuba</option>
               {PROVINCES.map((p) => (
                 <option key={p} value={p}>
@@ -166,7 +154,9 @@ export default function BuscarClient() {
           </label>
 
           <div>
-            <span className="text-gray-500 text-xs">Precio (USD)</span>
+            <span className="text-ink-soft text-xs font-medium">
+              Precio (USD)
+            </span>
             <div className="flex gap-2 items-center mt-1">
               <input
                 name="min"
@@ -174,27 +164,23 @@ export default function BuscarClient() {
                 min="0"
                 placeholder="Mínimo"
                 defaultValue={min}
-                className="w-full border border-gray-300 rounded px-2 py-2"
+                className="input"
               />
-              <span className="text-gray-400">–</span>
+              <span className="text-ink-soft">–</span>
               <input
                 name="max"
                 type="number"
                 min="0"
                 placeholder="Máximo"
                 defaultValue={max}
-                className="w-full border border-gray-300 rounded px-2 py-2"
+                className="input"
               />
             </div>
           </div>
 
           <label className="flex flex-col gap-1">
-            <span className="text-gray-500 text-xs">Condición</span>
-            <select
-              name="cond"
-              defaultValue={cond}
-              className="border border-gray-300 rounded px-2 py-2"
-            >
+            <span className="text-ink-soft text-xs font-medium">Condición</span>
+            <select name="cond" defaultValue={cond} className="input">
               <option value="">Cualquiera</option>
               {CONDITIONS.map((c) => (
                 <option key={c.value} value={c.value}>
@@ -204,15 +190,12 @@ export default function BuscarClient() {
             </select>
           </label>
 
-          <button
-            type="submit"
-            className="bg-brand-blue hover:bg-brand-blue-dark text-white font-semibold rounded py-2 transition-colors"
-          >
+          <button type="submit" className="btn btn-mar w-full">
             Aplicar filtros
           </button>
           <Link
             href="/buscar"
-            className="text-center text-gray-400 hover:text-gray-600"
+            className="text-center text-ink-soft hover:text-coral-dark"
           >
             Limpiar filtros
           </Link>
@@ -220,8 +203,8 @@ export default function BuscarClient() {
 
         {/* Resultados */}
         <section>
-          <div className="bg-white rounded-md shadow-sm px-4 py-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
-            <span className="text-gray-700">
+          <div className="card px-4 py-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+            <span className="text-ink">
               {loading
                 ? "Buscando…"
                 : `${listings.length} ${listings.length === 1 ? "resultado" : "resultados"}${catName ? ` en ${catName}` : ""}`}
@@ -235,8 +218,8 @@ export default function BuscarClient() {
                   })}
                   className={
                     orden === s.key
-                      ? "text-brand-blue font-semibold"
-                      : "text-gray-500 hover:text-brand-blue"
+                      ? "text-mar font-semibold underline decoration-wavy decoration-coral/70 underline-offset-4"
+                      : "text-ink-soft hover:text-mar"
                   }
                 >
                   {s.label}
@@ -246,18 +229,18 @@ export default function BuscarClient() {
           </div>
 
           {!loading && listings.length === 0 ? (
-            <div className="bg-white rounded-md p-12 mt-3 text-center text-gray-500 shadow-sm">
+            <div className="card p-12 mt-3 text-center text-ink-soft">
               <p className="text-3xl mb-3" aria-hidden>
                 🔍
               </p>
-              <p className="font-medium text-gray-700 mb-1">
+              <p className="font-semibold text-ink mb-1">
                 No encontramos publicaciones
               </p>
               <p className="text-sm">
                 Prueba con otra búsqueda o{" "}
                 <Link
                   href="/publicar"
-                  className="text-brand-blue hover:underline"
+                  className="text-mar hover:text-mar-dark font-semibold"
                 >
                   publica lo que buscas vender
                 </Link>
@@ -270,14 +253,11 @@ export default function BuscarClient() {
             >
               {(loading ? Array.from({ length: 8 }) : listings).map((l, i) =>
                 loading ? (
-                  <div
-                    key={i}
-                    className="bg-white rounded-md overflow-hidden shadow-sm"
-                  >
-                    <div className="aspect-[4/3] bg-gray-100 animate-pulse" />
+                  <div key={i} className="card overflow-hidden">
+                    <div className="aspect-[4/3] bg-sand/70 animate-pulse" />
                     <div className="p-3 space-y-2">
-                      <div className="h-5 w-1/2 bg-gray-100 rounded animate-pulse" />
-                      <div className="h-4 w-full bg-gray-100 rounded animate-pulse" />
+                      <div className="h-6 w-1/2 bg-sand rounded animate-pulse" />
+                      <div className="h-4 w-full bg-sand rounded animate-pulse" />
                     </div>
                   </div>
                 ) : (

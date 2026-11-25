@@ -18,9 +18,9 @@ type MyListing = {
 };
 
 const STATUS_STYLES: Record<string, string> = {
-  active: "bg-green-100 text-green-800",
-  paused: "bg-yellow-100 text-yellow-800",
-  sold: "bg-blue-100 text-blue-800",
+  active: "bg-palm/15 text-palm border-palm/40",
+  paused: "bg-sun/25 text-ink border-sun",
+  sold: "bg-mar/10 text-mar border-mar/40",
 };
 
 export default function MiCuentaPage() {
@@ -43,7 +43,11 @@ export default function MiCuentaPage() {
     }
     setUid(user.id);
     const [{ data: prof }, { data: rows }] = await Promise.all([
-      supabase.from("profiles").select("username, phone").eq("id", user.id).single(),
+      supabase
+        .from("profiles")
+        .select("username, phone")
+        .eq("id", user.id)
+        .single(),
       supabase
         .from("listings")
         .select("id, title, price_usd, images, status, views, created_at")
@@ -65,7 +69,10 @@ export default function MiCuentaPage() {
   async function savePhone() {
     if (!uid) return;
     const supabase = createClient();
-    await supabase.from("profiles").update({ phone: phone.trim() }).eq("id", uid);
+    await supabase
+      .from("profiles")
+      .update({ phone: phone.trim() })
+      .eq("id", uid);
     setSavedPhone(true);
     setTimeout(() => setSavedPhone(false), 2500);
   }
@@ -77,7 +84,12 @@ export default function MiCuentaPage() {
   }
 
   async function removeListing(id: string) {
-    if (!window.confirm("¿Seguro que quieres eliminar este anuncio? También se borrarán sus fotos.")) return;
+    if (
+      !window.confirm(
+        "¿Seguro que quieres eliminar este anuncio? También se borrarán sus fotos."
+      )
+    )
+      return;
     const supabase = createClient();
     const target = listings.find((l) => l.id === id);
     if (target?.images?.length) {
@@ -87,7 +99,9 @@ export default function MiCuentaPage() {
             const marker = "/listing-images/";
             const u = new URL(url);
             const i = u.pathname.indexOf(marker);
-            return i >= 0 ? decodeURIComponent(u.pathname.slice(i + marker.length)) : null;
+            return i >= 0
+              ? decodeURIComponent(u.pathname.slice(i + marker.length))
+              : null;
           } catch {
             return null;
           }
@@ -110,7 +124,7 @@ export default function MiCuentaPage() {
 
   if (loading) {
     return (
-      <div className="max-w-3xl mx-auto px-4 py-16 text-center text-gray-500 text-sm">
+      <div className="max-w-3xl mx-auto px-4 py-16 text-center text-ink-soft text-sm">
         Cargando…
       </div>
     );
@@ -118,19 +132,19 @@ export default function MiCuentaPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
-      <div className="bg-white rounded-md shadow-sm p-6 mb-4">
+      <div className="card p-6 mb-4">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <h1 className="text-xl font-semibold text-gray-800">
+            <h1 className="font-display text-2xl font-extrabold text-ink">
               Hola, {username ?? "usuario"} 👋
             </h1>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm text-ink-soft mt-1">
               Administra tus publicaciones y tu contacto.
             </p>
           </div>
           <button
             onClick={logout}
-            className="text-sm text-gray-500 hover:text-red-600 underline"
+            className="text-sm text-ink-soft hover:text-coral-dark underline underline-offset-4"
           >
             Salir
           </button>
@@ -138,58 +152,56 @@ export default function MiCuentaPage() {
 
         <div className="mt-5 flex flex-col sm:flex-row gap-2 sm:items-end">
           <label className="flex flex-col gap-1 text-sm grow">
-            <span className="text-gray-600">Teléfono / WhatsApp de contacto</span>
+            <span className="text-ink font-medium">
+              Teléfono / WhatsApp de contacto
+            </span>
             <input
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="ej: 5 123 4567"
-              className="border border-gray-300 rounded px-3 py-2 outline-none focus:border-brand-blue"
+              className="input"
             />
           </label>
-          <button
-            onClick={savePhone}
-            className="bg-brand-blue hover:bg-brand-blue-dark text-white text-sm font-semibold rounded px-4 py-2 transition-colors"
-          >
+          <button onClick={savePhone} className="btn btn-mar">
             Guardar
           </button>
         </div>
         {savedPhone && (
-          <p className="text-xs text-green-700 mt-2">✔ Teléfono actualizado</p>
+          <p className="text-xs text-palm font-semibold mt-2">
+            ✔ Teléfono actualizado
+          </p>
         )}
       </div>
 
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-lg font-semibold text-gray-800">
+        <h2 className="font-display text-xl font-extrabold text-ink">
           Mis publicaciones ({listings.length})
         </h2>
-        <Link
-          href="/publicar"
-          className="bg-brand-blue hover:bg-brand-blue-dark text-white text-sm font-semibold rounded px-4 py-2 transition-colors"
-        >
+        <Link href="/publicar" className="btn btn-coral">
           + Publicar
         </Link>
       </div>
 
       {listings.length === 0 ? (
-        <div className="bg-white rounded-md shadow-sm p-10 text-center text-gray-500">
+        <div className="card p-10 text-center text-ink-soft">
           <p className="text-3xl mb-2" aria-hidden>
             📢
           </p>
           Todavía no has publicado nada.{" "}
-          <Link href="/publicar" className="text-brand-blue hover:underline">
+          <Link
+            href="/publicar"
+            className="text-mar hover:text-mar-dark font-semibold"
+          >
             ¡Publica tu primer anuncio!
           </Link>
         </div>
       ) : (
         <div className="flex flex-col gap-3">
           {listings.map((l) => (
-            <div
-              key={l.id}
-              className="bg-white rounded-md shadow-sm p-3 flex gap-3 items-center"
-            >
+            <div key={l.id} className="card p-3 flex gap-3 items-center">
               <Link href={`/listing/${l.id}`} className="shrink-0">
-                <div className="w-20 h-20 rounded overflow-hidden bg-[#f7f7f7]">
+                <div className="w-20 h-20 rounded-lg overflow-hidden bg-sand/70 border border-ink/10">
                   {l.images?.[0] ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
@@ -198,7 +210,7 @@ export default function MiCuentaPage() {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-300 text-2xl">
+                    <div className="w-full h-full flex items-center justify-center text-ink/20 text-2xl">
                       🖼️
                     </div>
                   )}
@@ -206,23 +218,23 @@ export default function MiCuentaPage() {
               </Link>
 
               <div className="min-w-0 grow">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
                   <span
-                    className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${STATUS_STYLES[l.status] ?? "bg-gray-100 text-gray-700"}`}
+                    className={`text-[11px] font-semibold px-2 py-0.5 rounded-full border-2 ${STATUS_STYLES[l.status] ?? "bg-ink/5 text-ink-soft border-ink/20"}`}
                   >
                     {STATUS_LABELS[l.status] ?? l.status}
                   </span>
-                  <span className="text-xs text-gray-400">
+                  <span className="text-xs text-ink-soft">
                     {timeAgo(l.created_at)} · {l.views} vistas
                   </span>
                 </div>
                 <Link
                   href={`/listing/${l.id}`}
-                  className="block text-sm text-gray-800 hover:text-brand-blue font-medium line-clamp-1 mt-1"
+                  className="block text-sm text-ink hover:text-mar font-medium line-clamp-1 mt-1"
                 >
                   {l.title}
                 </Link>
-                <p className="text-lg text-gray-900">
+                <p className="font-display text-lg font-extrabold text-ink">
                   {formatPrice(l.price_usd)}
                 </p>
               </div>
@@ -231,14 +243,14 @@ export default function MiCuentaPage() {
                 {l.status !== "sold" ? (
                   <button
                     onClick={() => setStatus(l.id, "sold")}
-                    className="border border-brand-blue text-brand-blue hover:bg-blue-50 rounded px-3 py-1.5 font-medium"
+                    className="btn btn-ghost !py-1.5 !px-3 border-mar/50 text-mar hover:bg-mar/10"
                   >
                     ✔ Vendido
                   </button>
                 ) : (
                   <button
                     onClick={() => setStatus(l.id, "active")}
-                    className="border border-brand-blue text-brand-blue hover:bg-blue-50 rounded px-3 py-1.5 font-medium"
+                    className="btn btn-ghost !py-1.5 !px-3 border-mar/50 text-mar hover:bg-mar/10"
                   >
                     ↺ Reactivar
                   </button>
@@ -246,21 +258,21 @@ export default function MiCuentaPage() {
                 {l.status === "active" ? (
                   <button
                     onClick={() => setStatus(l.id, "paused")}
-                    className="border border-gray-300 text-gray-600 hover:bg-gray-50 rounded px-3 py-1.5 font-medium"
+                    className="btn btn-ghost !py-1.5 !px-3"
                   >
                     ⏸ Pausar
                   </button>
                 ) : l.status === "paused" ? (
                   <button
                     onClick={() => setStatus(l.id, "active")}
-                    className="border border-gray-300 text-gray-600 hover:bg-gray-50 rounded px-3 py-1.5 font-medium"
+                    className="btn btn-ghost !py-1.5 !px-3"
                   >
                     ▶ Activar
                   </button>
                 ) : null}
                 <button
                   onClick={() => removeListing(l.id)}
-                  className="border border-red-200 text-red-600 hover:bg-red-50 rounded px-3 py-1.5 font-medium"
+                  className="btn btn-ghost !py-1.5 !px-3 border-coral/50 text-coral-dark hover:bg-coral/10"
                 >
                   🗑 Eliminar
                 </button>

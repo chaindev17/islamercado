@@ -26,7 +26,7 @@ export default function Gallery({
           <svg
             viewBox="0 0 24 24"
             fill="currentColor"
-            className="w-20 h-20 text-gray-300"
+            className="w-20 h-20 text-ink/15"
             aria-hidden
           >
             <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
@@ -41,7 +41,7 @@ export default function Gallery({
               onClick={() => setIdx(i)}
               aria-label={`Ver imagen ${i + 1}`}
               className={`w-16 h-16 rounded-md overflow-hidden bg-[#f7f7f7] ${
-                i === idx ? "ring-2 ring-brand-blue" : "opacity-70 hover:opacity-100"
+                i === idx ? "ring-2 ring-mar" : "opacity-70 hover:opacity-100"
               }`}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
