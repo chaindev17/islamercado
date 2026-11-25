@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import Gallery from "@/components/Gallery";
+import FavoriteButton from "@/components/FavoriteButton";
 import { formatPrice, timeAgo, waDigits } from "@/lib/format";
 import { CONDITIONS } from "@/lib/constants";
 
@@ -50,6 +51,8 @@ export default function ListingPage() {
   const [listing, setListing] = useState<ListingRow | null>(null);
   const [missing, setMissing] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
+  const [authed, setAuthed] = useState(false);
+  const [fav, setFav] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -78,6 +81,18 @@ export default function ListingPage() {
       const owner = user?.id === row.seller_id;
       if (!alive) return;
       setIsOwner(owner);
+      setAuthed(!!user);
+
+      if (user) {
+        const { data: favRow } = await supabase
+          .from("favorites")
+          .select("listing_id")
+          .eq("user_id", user.id)
+          .eq("listing_id", id)
+          .maybeSingle();
+        if (!alive) return;
+        setFav(!!favRow);
+      }
 
       if (row.status !== "active" && !owner) {
         setMissing(true);
@@ -232,9 +247,16 @@ export default function ListingPage() {
         {/* Columna derecha */}
         <div className="flex flex-col gap-4 lg:sticky lg:top-32">
           <div className="bg-white rounded-md shadow-sm p-4 sm:p-6">
-            <p className="text-3xl font-light text-gray-900">
-              {formatPrice(listing.price_usd)}
-            </p>
+            <div className="flex items-start justify-between gap-3">
+              <p className="text-3xl font-light text-gray-900">
+                {formatPrice(listing.price_usd)}
+              </p>
+              <FavoriteButton
+                listingId={listing.id}
+                initial={fav}
+                big={true}
+              />
+            </div>
             {listing.negotiable && (
               <span className="inline-block mt-2 text-xs font-semibold text-brand-green bg-green-50 rounded px-2 py-1">
                 ✔ Precio negociable
@@ -247,32 +269,54 @@ export default function ListingPage() {
               {[listing.city, listing.province].filter(Boolean).join(", ")}
             </p>
 
-            {contactPhone && waHref ? (
-              <div className="mt-5 flex flex-col gap-2">
-                <a
-                  href={waHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full text-center bg-brand-green hover:bg-green-700 text-white font-semibold rounded py-2.5 transition-colors"
-                >
-                  💬 Escribir por WhatsApp
-                </a>
-                <a
-                  href={`tel:+${waDigits(contactPhone)}`}
+            <div className="mt-5 flex flex-col gap-2">
+              {isOwner ? (
+                <Link
+                  href="/mensajes"
                   className="w-full text-center bg-brand-blue hover:bg-brand-blue-dark text-white font-semibold rounded py-2.5 transition-colors"
                 >
-                  📞 Llamar: {contactPhone}
-                </a>
-                <p className="text-[11px] text-gray-400 text-center mt-1">
-                  Coordiná el pago y la entrega directamente con el vendedor.
+                  💬 Ver mensajes recibidos
+                </Link>
+              ) : (
+                <Link
+                  href={
+                    authed
+                      ? `/mensajes/${listing.id}/${listing.seller_id}`
+                      : `/login?next=/listing/${listing.id}`
+                  }
+                  className="w-full text-center bg-brand-blue hover:bg-brand-blue-dark text-white font-semibold rounded py-2.5 transition-colors"
+                >
+                  💬 Chatear con el vendedor
+                </Link>
+              )}
+              {contactPhone && waHref && (
+                <>
+                  <a
+                    href={waHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full text-center bg-brand-green hover:bg-green-700 text-white font-semibold rounded py-2.5 transition-colors"
+                  >
+                    🟢 WhatsApp
+                  </a>
+                  <a
+                    href={`tel:+${waDigits(contactPhone)}`}
+                    className="w-full text-center border border-brand-blue text-brand-blue hover:bg-blue-50 font-semibold rounded py-2.5 transition-colors"
+                  >
+                    📞 Llamar: {contactPhone}
+                  </a>
+                </>
+              )}
+              {!contactPhone && !isOwner && (
+                <p className="text-xs text-gray-400 text-center">
+                  Este vendedor todavía no publicó un teléfono; escríbele por
+                  el chat.
                 </p>
-              </div>
-            ) : (
-              <div className="mt-5 bg-gray-50 rounded p-3 text-sm text-gray-600 text-center">
-                Este vendedor todavía no publicó un teléfono de contacto.
-                ¡Pronto lo agregará!
-              </div>
-            )}
+              )}
+              <p className="text-[11px] text-gray-400 text-center mt-1">
+                Coordiná el pago y la entrega directamente con el vendedor.
+              </p>
+            </div>
           </div>
 
           <div className="bg-white rounded-md shadow-sm p-4 sm:p-6">

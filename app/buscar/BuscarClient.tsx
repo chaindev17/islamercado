@@ -27,7 +27,20 @@ export default function BuscarClient() {
     ...FALLBACK_CATEGORIES,
   ]);
   const [listings, setListings] = useState<ListingCardData[]>([]);
+  const [favs, setFavs] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(async ({ data }) => {
+      if (!data.user) return;
+      const { data: favs } = await supabase
+        .from("favorites")
+        .select("listing_id")
+        .eq("user_id", data.user.id);
+      setFavs(new Set((favs ?? []).map((f) => f.listing_id)));
+    });
+  }, []);
 
   useEffect(() => {
     const supabase = createClient();
@@ -268,7 +281,11 @@ export default function BuscarClient() {
                     </div>
                   </div>
                 ) : (
-                  <ListingCard key={(l as ListingCardData).id} listing={l as ListingCardData} />
+                  <ListingCard
+                    key={(l as ListingCardData).id}
+                    listing={l as ListingCardData}
+                    favSet={favs}
+                  />
                 )
               )}
             </div>

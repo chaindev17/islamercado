@@ -12,6 +12,7 @@ export default function HomePage() {
     ...FALLBACK_CATEGORIES,
   ]);
   const [listings, setListings] = useState<ListingCardData[]>([]);
+  const [favs, setFavs] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -35,6 +36,14 @@ export default function HomePage() {
         setListings((data ?? []) as unknown as ListingCardData[]);
         setLoading(false);
       });
+    supabase.auth.getUser().then(async ({ data }) => {
+      if (!data.user) return;
+      const { data: favs } = await supabase
+        .from("favorites")
+        .select("listing_id")
+        .eq("user_id", data.user.id);
+      setFavs(new Set((favs ?? []).map((f) => f.listing_id)));
+    });
   }, []);
 
   return (
@@ -133,7 +142,7 @@ export default function HomePage() {
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
               {listings.map((l) => (
-                <ListingCard key={l.id} listing={l} />
+                <ListingCard key={l.id} listing={l} favSet={favs} />
               ))}
             </div>
           )}

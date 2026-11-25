@@ -1,4 +1,5 @@
 import Link from "next/link";
+import FavoriteButton from "./FavoriteButton";
 import { formatPrice } from "@/lib/format";
 
 export type ListingCardData = {
@@ -28,7 +29,13 @@ function Placeholder() {
   );
 }
 
-export default function ListingCard({ listing }: { listing: ListingCardData }) {
+export default function ListingCard({
+  listing,
+  favSet,
+}: {
+  listing: ListingCardData;
+  favSet?: Set<string>;
+}) {
   const img = listing.images?.[0];
 
   return (
@@ -37,6 +44,12 @@ export default function ListingCard({ listing }: { listing: ListingCardData }) {
       className="group bg-white rounded-md overflow-hidden shadow-[0_1px_2px_rgba(0,0,0,0.12)] hover:shadow-[0_6px_16px_rgba(0,0,0,0.18)] transition-shadow flex flex-col"
     >
       <div className="aspect-[4/3] bg-[#f7f7f7] relative overflow-hidden">
+        <div className="absolute top-2 right-2 z-10">
+          <FavoriteButton
+            listingId={listing.id}
+            initial={favSet?.has(listing.id) ?? false}
+          />
+        </div>
         {img ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img

@@ -9,10 +9,12 @@
 - 🏠 **Home** con buscador destacado, categorías y publicaciones recientes
 - 🔍 **Búsqueda y filtros**: texto libre, categoría, provincia, rango de precio, condición y ordenamiento
 - 📄 **Página de publicación**: galería de fotos, precio, vendedor y botones de WhatsApp / llamada
+- 💬 **Chat interno en tiempo real**: conversaciones por publicación entre comprador y vendedor, con bandeja de entrada, contador de no leídos y notificaciones en vivo (Supabase Realtime)
+- ♥ **Favoritos**: guarda publicaciones con un toque y encuéntralas en `/favoritos`
 - 📢 **Publicar anuncio** (gratis): título, descripción, precio USD, condición, provincia/ciudad y hasta 6 fotos con subida a Supabase Storage
 - 👤 **Cuentas**: registro y login con email + contraseña (autoconfirmados), perfiles con teléfono de contacto
 - 🧰 **Mi cuenta**: administra tus anuncios — marcar vendido, pausar, reactivar o eliminar (borra también sus fotos)
-- 🔒 **Seguridad**: Row Level Security en todas las tablas — cada usuario solo edita lo suyo; lecturas públicas solo de anuncios activos
+- 🔒 **Seguridad**: Row Level Security en todas las tablas — cada usuario solo ve/edita lo suyo (incluidos los mensajes, visibles solo para sus participantes)
 - 🌎 **Diseño responsive** estilo Mercado Libre (amarillo + azul), pensado para móviles
 
 ## Stack
@@ -31,11 +33,14 @@
 app/
   page.tsx                  → Home (hero + categorías + recientes)
   buscar/                   → Búsqueda con filtros y orden
-  listing/[id]/             → Detalle de publicación + contacto
+  listing/[id]/             → Detalle de publicación + contacto + chat
+  mensajes/                 → Bandeja de conversaciones
+  mensajes/[listingId]/[peerId]/ → Chat en tiempo real
+  favoritos/                → Publicaciones guardadas
   publicar/                 → Formulario para publicar (subida de fotos)
   mi-cuenta/                → Administración de mis anuncios y teléfono
   login/ · registro/        → Autenticación
-components/                 → Header, SearchBar, ListingCard, Gallery, Footer
+components/                 → Header, SearchBar, ListingCard, FavoriteButton, Gallery, Footer
 lib/
   supabase/client.ts        → Cliente de navegador (@supabase/ssr)
   constants.ts              → Provincias, condiciones, categorías
@@ -67,8 +72,9 @@ Con cualquiera puedes entrar y administrar los anuncios de ejemplo.
 
 ## Roadmap
 
-- Chat interno entre comprador y vendedor
-- Favoritos y notificaciones
+- ~~Chat interno entre comprador y vendedor~~ ✅ (con Supabase Realtime)
+- ~~Favoritos~~ ✅
+- Notificaciones push
 - Pagos y envíos (transferencia móvil, Zelle, etc.)
 - Reseñas de vendedores
 - Versión PWA ligera para conexiones de baja señal
