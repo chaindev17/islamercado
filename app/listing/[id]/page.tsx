@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import Gallery from "@/components/Gallery";
 import FavoriteButton from "@/components/FavoriteButton";
+import { StarDisplay } from "@/components/Stars";
 import { formatPrice, timeAgo, waDigits } from "@/lib/format";
 import { CONDITIONS } from "@/lib/constants";
 
@@ -53,6 +54,10 @@ export default function ListingPage() {
   const [isOwner, setIsOwner] = useState(false);
   const [authed, setAuthed] = useState(false);
   const [fav, setFav] = useState(false);
+  const [sellerRating, setSellerRating] = useState<{
+    avg: number;
+    count: number;
+  } | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -99,6 +104,19 @@ export default function ListingPage() {
         return;
       }
       setListing(row);
+
+      // Valoración del vendedor
+      const { data: revs } = await supabase
+        .from("reviews")
+        .select("rating")
+        .eq("seller_id", row.seller_id)
+        .limit(200);
+      if (!alive) return;
+      if (revs && revs.length > 0) {
+        const avg =
+          revs.reduce((s, r) => s + Number(r.rating), 0) / revs.length;
+        setSellerRating({ avg, count: revs.length });
+      }
 
       if (!owner) {
         try {
@@ -313,9 +331,24 @@ export default function ListingPage() {
 
           <div className="card p-4 sm:p-6">
             <p className="text-xs text-ink-soft mb-1">Vendedor</p>
-            <p className="font-semibold text-ink">
+            <Link
+              href={`/vendedor/${listing.seller_id}`}
+              className="font-semibold text-ink hover:text-mar"
+            >
               {listing.profiles?.username ?? "Usuario de IslaMercado"}
-            </p>
+            </Link>
+            {sellerRating && (
+              <div className="flex items-center gap-2 mt-1.5">
+                <StarDisplay rating={sellerRating.avg} size="w-4 h-4" />
+                <span className="text-sm font-semibold text-ink">
+                  {sellerRating.avg.toFixed(1)}
+                </span>
+                <span className="text-xs text-ink-soft">
+                  ({sellerRating.count}{" "}
+                  {sellerRating.count === 1 ? "reseña" : "reseñas"})
+                </span>
+              </div>
+            )}
             {listing.profiles?.created_at && (
               <p className="text-xs text-ink-soft mt-1">
                 Miembro desde{" "}
@@ -325,6 +358,12 @@ export default function ListingPage() {
                 )}
               </p>
             )}
+            <Link
+              href={`/vendedor/${listing.seller_id}`}
+              className="inline-block mt-3 text-xs font-semibold text-mar hover:text-mar-dark underline decoration-wavy decoration-coral/70 underline-offset-4"
+            >
+              Ver perfil, anuncios y reseñas →
+            </Link>
           </div>
         </div>
       </div>

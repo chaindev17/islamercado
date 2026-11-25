@@ -1,0 +1,54 @@
+{
+  "name": "IslaMercado — Compra y vende en Cuba",
+  "short_name": "IslaMercado",
+  "description": "El marketplace de toda la isla: publica gratis, chatea sin vueltas y coordina tu trato en cualquier provincia de Cuba.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#fbf3e4",
+  "theme_color": "#fbf3e4",
+  "lang": "es",
+  "categories": ["shopping", "community"],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Publicar anuncio",
+      "short_name": "Publicar",
+      "url": "/publicar",
+      "description": "Crea un anuncio gratis"
+    },
+    {
+      "name": "Mensajes",
+      "short_name": "Mensajes",
+      "url": "/mensajes",
+      "description": "Tus conversaciones"
+    },
+    {
+      "name": "Favoritos",
+      "short_name": "Favoritos",
+      "url": "/favoritos",
+      "description": "Publicaciones guardadas"
+    }
+  ]
+}
